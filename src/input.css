@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === Global Styling for SweetAlert2 Buttons === */
+.swal2-confirm,
+.swal2-cancel,
+.swal2-deny {
+  color: #fff !important;
+  background-color: #1890ff !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 6px !important;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: none !important;
+  transition: background-color 0.3s ease;
+}
+
+.swal2-cancel {
+  background-color: #d33 !important;
+}
+
+.swal2-confirm:hover,
+.swal2-cancel:hover {
+  filter: brightness(1.1);
+}
+
+/* Optional: Dark mode detection (if you use a "dark" class on body or html) */
+.dark .swal2-confirm,
+.dark .swal2-cancel {
+  color: #fff !important;
+}
+
+/* Highlight selected menu item in dark mode */
+.ant-menu-dark .ant-menu-item-selected {
+  background-color: #2563eb !important;
+  color: #fff !important;
+}
+
+/* Hover style for submenu items in dark mode */
+.ant-menu-dark .ant-menu-item:hover {
+  background-color: #334155 !important;
+  color: #fff !important;
+}
+
+/* Fix nested item background */
+.ant-menu-dark .ant-menu-submenu > .ant-menu {
+  background-color: #1E1E2D !important;
+}
+
