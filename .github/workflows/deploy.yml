@@ -1,4 +1,4 @@
-name: 🚀 Deploy ke Hostnic
+name: 🚀 Build & Deploy ke Hostnic via FTP
 
 on:
   push:
@@ -6,25 +6,26 @@ on:
       - main
 
 jobs:
-  deploy:
+  ftp-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup SSH
+      - name: Install dependencies & Build
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          npm install
+          npm run build
 
-      - name: Jalankan Deploy ke Server Hostnic
-        run: |
-          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd ~/antd-vite.bagasarya.my.id
-            git pull origin main
-            npm install
-            npm run build
-          EOF
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ftp.bagasarya.my.id
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: dist
+          server-dir: /home/bagasary/bagasarya.my.id/antd-vite
+
+      - name: Success message
+        run: echo "✅ Deployed to https://antd-vite.bagasarya.my.id"
