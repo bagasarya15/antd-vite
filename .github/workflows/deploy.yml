@@ -26,6 +26,11 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: dist/
           server-dir: /home/bagasary/antd-vite.bagasarya.my.id/
+          dangerous-clean-slate: true
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
 
       - name: Success message
         run: echo "✅ Deployed to https://antd-vite.bagasarya.my.id"
