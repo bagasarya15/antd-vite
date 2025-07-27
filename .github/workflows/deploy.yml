@@ -1,4 +1,4 @@
-name: 🚀 Build & Deploy ke Hostnic via FTP
+name: 🚀 Deploy ke Hostnic via FTP
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
           npm run build
 
       - name: FTP Deploy
-        uses: SamKirkland/ftp-deploy-action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ftp.bagasarya.my.id
           username: ${{ secrets.FTP_USERNAME }}
