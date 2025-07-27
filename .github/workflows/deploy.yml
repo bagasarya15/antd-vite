@@ -13,19 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install dependencies & Build
+      - name: Install dependencies & build Vite
         run: |
           npm install
           npm run build
 
-      - name: FTP Deploy
+      - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ftp.bagasarya.my.id
+          server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: dist/
-          server-dir: /home/bagasary/bagasarya.my.id/antd-vite/
+          server-dir: /home/bagasary/antd-vite.bagasarya.my.id/
 
       - name: Success message
         run: echo "✅ Deployed to https://antd-vite.bagasarya.my.id"
