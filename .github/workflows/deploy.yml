@@ -18,6 +18,9 @@ jobs:
           npm install
           npm run build
 
+      - name: Cek isi folder dist
+        run: ls -R dist
+
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -27,10 +30,3 @@ jobs:
           local-dir: dist/
           server-dir: /home/bagasary/antd-vite.bagasarya.my.id/
           dangerous-clean-slate: true
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-
-      - name: Success message
-        run: echo "✅ Deployed to https://antd-vite.bagasarya.my.id"
