@@ -1,7 +1,7 @@
+import { useEffect, useState, useRef } from "react";
+import { message } from "antd";
 import Swal from "sweetalert2";
-import { Badge, Button, message } from "antd";
-import React, { useEffect, useState } from "react";
-import EditCategory from "../component/EditCategory";
+import debounce from "lodash/debounce";
 
 const dummyDataList = [
   { id: 1, category_name: "Food", category_type: "Expense" },
@@ -12,14 +12,7 @@ const dummyDataList = [
   { id: 6, category_name: "Investment", category_type: "Income" },
 ];
 
-const CategoryData = ({ render }) => {
-  const user = {
-    data: {
-      id: 1,
-      name: "John Doe",
-    },
-  };
-
+const CategoryData = () => {
   const [err, setErr] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -30,7 +23,6 @@ const CategoryData = ({ render }) => {
     pageSize: 5,
     total: 0,
   });
-  const [editModalVisible, setEditModalVisible] = useState(false);
 
   const handleAlert = (valMessage) => message.success(valMessage);
   const handleAlertError = (errorMessage) => message.error(errorMessage);
@@ -71,23 +63,15 @@ const CategoryData = ({ render }) => {
     }));
   };
 
+  const debounceSearch = useRef(
+    debounce((val) => {
+      setSearchValue(val);
+    }, 2000)
+  ).current;
+
   const handleSearchChange = (e) => {
-    const searchInput = e.target.value;
-    if (searchInput.length >= 4 || searchInput === "") {
-      setSearchValue(searchInput);
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      fetchData();
-    }
-  };
-
-  const handleEdit = (record) => {
-    setSelectedRow(record);
-    setEditModalVisible(true);
+    const val = e.target.value;
+    debounceSearch(val);
   };
 
   const handleDelete = (record) => {
@@ -114,75 +98,27 @@ const CategoryData = ({ render }) => {
     });
   };
 
-  const columns = [
-    {
-      title: "Category",
-      dataIndex: "category_name",
-      key: "category_name",
-      render: (text) => text,
-    },
-    {
-      title: "Type",
-      dataIndex: "category_type",
-      key: "category_type",
-      render: (type) => {
-        let color = type === "Expense" ? "#bf3952" : "#3b82f6";
-        let display = type === "Expense" ? "Expense" : "Income";
-        return <Badge color={color} text={display} />;
-      },
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (_, record) => (
-        <span className="flex justify-center gap-2">
-          <Button
-            onClick={() => handleEdit(record)}
-            className="border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white"
-          >
-            Edit
-          </Button>
-          <Button
-            onClick={() => handleDelete(record)}
-            className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
-          >
-            Delete
-          </Button>
-        </span>
-      ),
-    },
-  ];
+  useEffect(() => {
+    return () => {
+      debounceSearch.cancel();
+    };
+  }, [debounceSearch]);
 
-  return (
-    <>
-      {editModalVisible && (
-        <EditCategory
-          visible={editModalVisible}
-          onCancel={() => setEditModalVisible(false)}
-          user={user}
-          fetchData={fetchData}
-          initialValues={selectedRow}
-          handleAlert={handleAlert}
-          handleAlertError={handleAlertError}
-        />
-      )}
-      {render({
-        err,
-        data,
-        columns,
-        loading,
-        pagination,
-        searchValue,
-        selectedRow,
-        fetchData,
-        handleAlert,
-        handleAlertError,
-        handleSearchChange,
-        handleKeyDown,
-        handlePaginationChange,
-      })}
-    </>
-  );
+  return {
+    data,
+    err,
+    loading,
+    pagination,
+    selectedRow,
+    searchValue,
+    setSelectedRow,
+    handleAlert,
+    handleAlertError,
+    handleSearchChange,
+    handlePaginationChange,
+    fetchData,
+    handleDelete,
+  };
 };
 
 export default CategoryData;
