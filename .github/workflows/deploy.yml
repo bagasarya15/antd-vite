@@ -24,7 +24,7 @@ jobs:
           server: ftp.bagasarya.my.id
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: dist
+          local-dir: dist/
           server-dir: /home/bagasary/bagasarya.my.id/antd-vite
 
       - name: Success message
