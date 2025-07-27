@@ -25,7 +25,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: dist/
-          server-dir: /home/bagasary/bagasarya.my.id/antd-vite
+          server-dir: /home/bagasary/bagasarya.my.id/antd-vite/
 
       - name: Success message
         run: echo "✅ Deployed to https://antd-vite.bagasarya.my.id"
