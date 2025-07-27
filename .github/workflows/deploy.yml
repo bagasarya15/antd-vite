@@ -18,27 +18,16 @@ jobs:
           npm install
           npm run build
 
-      - name: Show build output
-        run: ls -R dist
-
-      - name: Move inner content if nested
-        run: |
-          mkdir deploy
-          if [ -d "dist/home/bagasary/antd-vite.bagasarya.my.id" ]; then
-            mv dist/home/bagasary/antd-vite.bagasarya.my.id/* deploy/
-          else
-            mv dist/* deploy/
-          fi
-
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: deploy/
+          local-dir: dist/
           server-dir: /home/bagasary/antd-vite.bagasarya.my.id/
           dangerous-clean-slate: true
+          strip-components: 1
 
       - name: Success message
         run: echo "✅ Deployed to https://antd-vite.bagasarya.my.id"
